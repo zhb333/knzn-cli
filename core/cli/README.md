@@ -1,11 +1,11 @@
-# `@knzn-cli/cli`
+# `@knzn/cli`
 
 > TODO: description
 
 ## Usage
 
 ```
-const cli = require('@knzn-cli/cli');
+const cli = require('@knzn/cli');
 
 // TODO: DEMONSTRATE API
 ```

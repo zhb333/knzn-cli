@@ -1,9 +1,10 @@
-#! /usr/bin/env node
+#! /urs/bin/env node
 
 const importLocal = require("import-local");
 
 if (importLocal(__filename)) {
-  console.log("本地");
+  require("npmlog").info("cli", "正在使用 knzn-cli 本地版本");
 } else {
-  console.log("全局");
+  // require('../lib')(process.argv.slice(2));
+  console.log("program");
 }
