@@ -1,0 +1,29 @@
+{
+  "name": "@knzn-cli/exec",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "zhb333 <1140457303@qq.com>",
+  "homepage": "https://github.com/zhb333/knzn-cli/tree/main/core/exec#readme",
+  "license": "ISC",
+  "main": "lib/exec.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://mirrors.cloud.tencent.com/npm/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhb333/knzn-cli.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/@knzn-cli/exec.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/zhb333/knzn-cli/issues"
+  }
+}
