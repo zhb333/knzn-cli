@@ -31,5 +31,6 @@
   },
   "dependencies": {
     "import-local": "^3.1.0"
-  }
+  },
+  "gitHead": "4fdfedba71202cd17881274ad24fa8415250dc6e"
 }
