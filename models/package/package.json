@@ -33,6 +33,7 @@
     "fs-extra": "^11.1.0",
     "npminstall": "^7.5.2",
     "path-exists": "4.0.0",
-    "pkg-dir": "5.0.0"
+    "pkg-dir": "5.0.0",
+    "semver": "^7.3.8"
   }
 }

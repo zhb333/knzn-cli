@@ -5,6 +5,7 @@ const fse = require("fs-extra");
 const pkgDir = require("pkg-dir").sync;
 const pathExists = require("path-exists").sync;
 const npminstall = require("npminstall");
+const semver = require("semver");
 const { isObject } = require("@knzn/utils");
 const formatPath = require("@knzn/format-path");
 const {
@@ -54,18 +55,7 @@ class Package {
     return path.resolve(this.storeDir, this.packageName);
   }
 
-  // 判断当前Package是否存在
-  async exists() {
-    if (this.storeDir) {
-      await this.prepare();
-      return pathExists(this.cacheFilePath);
-    } else {
-      return pathExists(this.targetPath);
-    }
-  }
-
   async _install(packageVersion) {
-    await this.prepare();
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
@@ -81,15 +71,15 @@ class Package {
 
   // 安装Package
   async install() {
-    await this._install(this.packageVersion);
-  }
-
-  // 更新Package
-  async update() {
+    await this.prepare();
     // 1. 获取最新的npm模块版本号
     const latestPackageVersion = await getNpmLatestVersion(this.packageName);
-    await this._install(latestPackageVersion);
-    this.packageVersion = latestPackageVersion;
+    if (semver.gt(latestPackageVersion, this.packageVersion)) {
+      await this._install(latestPackageVersion);
+      this.packageVersion = latestPackageVersion;
+    } else {
+      await this._install(this.packageVersion);
+    }
   }
 
   // 获取入口文件的路径
