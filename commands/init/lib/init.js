@@ -8,6 +8,6 @@ const fse = require("fs-extra");
 module.exports = init;
 
 function init(args) {
-  console.log(args);
+  console.log(args, "fuck");
   return "Hello from init";
 }
