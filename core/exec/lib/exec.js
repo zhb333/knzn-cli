@@ -6,7 +6,7 @@ const log = require("@knzn/log");
 const { exec: spawn } = require("@knzn/utils");
 
 const SETTINGS = {
-  init: "@imooc-cli/init",
+  init: "@knzn/init",
   publish: "@imooc-cli/publish",
 };
 

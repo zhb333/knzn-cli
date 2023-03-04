@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const inquirer = require("inquirer");
+// const inquirer = require("inquirer");
 const fse = require("fs-extra");
 
 module.exports = init;
