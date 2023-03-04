@@ -1,14 +1,11 @@
 {
-  "name": "@knzn/cli",
+  "name": "@knzn/package",
   "version": "0.0.9",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
-  "homepage": "https://github.com/zhb333/knzn-cli/tree/main/core/cli#readme",
+  "homepage": "https://github.com/zhb333/knzn-cli/tree/main/models/package#readme",
   "license": "ISC",
-  "main": "lib/cli.js",
-  "bin": {
-    "knzn-cli": "bin/index.js"
-  },
+  "main": "lib/package.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -24,23 +21,18 @@
     "url": "git+https://github.com/zhb333/knzn-cli.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@knzn/cli.test.js"
+    "test": "node ./__tests__/@knzn/package.test.js"
   },
   "bugs": {
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
-    "@knzn/exec": "^0.0.9",
+    "@knzn/format-path": "^0.0.9",
     "@knzn/get-npm-info": "^0.0.9",
-    "@knzn/log": "^0.0.9",
-    "colors": "^1.4.0",
-    "commander": "^10.0.0",
-    "dotenv": "^16.0.3",
-    "import-local": "^3.1.0",
-    "npmlog": "^7.0.1",
+    "@knzn/utils": "^0.0.9",
+    "fs-extra": "^11.1.0",
+    "npminstall": "^7.5.2",
     "path-exists": "4.0.0",
-    "root-check": "1.0.0",
-    "semver": "^7.3.8",
-    "user-home": "^3.0.0"
+    "pkg-dir": "5.0.0"
   }
 }
