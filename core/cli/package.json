@@ -1,6 +1,6 @@
 {
   "name": "@knzn/cli",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/core/cli#readme",
@@ -30,9 +30,9 @@
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
-    "@knzn/exec": "^0.0.9",
-    "@knzn/get-npm-info": "^0.0.9",
-    "@knzn/log": "^0.0.9",
+    "@knzn/exec": "^0.0.10",
+    "@knzn/get-npm-info": "^0.0.10",
+    "@knzn/log": "^0.0.10",
     "colors": "^1.4.0",
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",
