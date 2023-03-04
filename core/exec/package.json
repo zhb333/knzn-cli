@@ -1,6 +1,6 @@
 {
   "name": "@knzn/exec",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/core/exec#readme",
@@ -27,8 +27,8 @@
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
-    "@knzn/log": "^0.0.12",
-    "@knzn/package": "^0.0.12",
-    "@knzn/utils": "^0.0.12"
+    "@knzn/log": "^0.0.13",
+    "@knzn/package": "^0.0.13",
+    "@knzn/utils": "^0.0.13"
   }
 }

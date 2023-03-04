@@ -1,6 +1,6 @@
 {
   "name": "@knzn/package",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/models/package#readme",
@@ -27,9 +27,9 @@
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
-    "@knzn/format-path": "^0.0.12",
-    "@knzn/get-npm-info": "^0.0.12",
-    "@knzn/utils": "^0.0.12",
+    "@knzn/format-path": "^0.0.13",
+    "@knzn/get-npm-info": "^0.0.13",
+    "@knzn/utils": "^0.0.13",
     "fs-extra": "^11.1.0",
     "npminstall": "^7.5.2",
     "path-exists": "4.0.0",
