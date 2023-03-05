@@ -56,6 +56,7 @@ class Package {
   }
 
   async _install(packageVersion) {
+    if (this.exists(packageVersion)) return;
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
@@ -67,6 +68,15 @@ class Package {
         },
       ],
     });
+  }
+
+  exists(version) {
+    const dir = pkgDir(this.cacheFilePath);
+    if (dir) {
+      const pkg = require(path.resolve(dir, "package.json"));
+      if (pkg.version === version) return true;
+    }
+    return false;
   }
 
   // 安装Package

@@ -27,7 +27,17 @@
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
+    "@knzn/command": "^1.0.0",
+    "@knzn/log": "^0.0.13",
+    "@knzn/package": "^0.0.13",
+    "@knzn/utils": "^0.0.13",
+    "ejs": "^3.1.8",
     "fs-extra": "^11.1.0",
-    "inquirer": "^9.1.4"
+    "glob": "^9.2.1",
+    "inquirer": "8.2.5",
+    "kebab-case": "^1.0.2",
+    "semver": "^7.3.8",
+    "user-home": "^3.0.0",
+    "validate-npm-package-name": "^5.0.0"
   }
 }
