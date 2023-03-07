@@ -13,15 +13,12 @@ var validatePackageName = require("validate-npm-package-name");
 const Command = require("@knzn/command");
 const Package = require("@knzn/package");
 const log = require("@knzn/log");
-const { spinnerStart, execAsync } = require("@knzn/utils");
+const { spinnerStart } = require("@knzn/utils");
 
 const getProjectTemplate = require("./getProjectTemplate");
 
 const TYPE_PROJECT = "project";
 const TYPE_COMPONENT = "component";
-
-const TEMPLATE_TYPE_NORMAL = "normal";
-const TEMPLATE_TYPE_CUSTOM = "custom";
 
 const WHITE_COMMAND = ["npm", "cnpm"];
 class InitCommand extends Command {
@@ -295,10 +292,12 @@ class InitCommand extends Command {
     // 拷贝模板代码至当前目录
     let spinner = spinnerStart("正在安装模板...");
     try {
-      const templatePath = path.resolve(
-        this.templateNpm.cacheFilePath,
-        "template"
-      );
+      let templatePath = process.env.CLI_TEMPLATE_PATH;
+      if (!templatePath) {
+        templatePath = path.resolve(this.templateNpm.cacheFilePath, "template");
+      } else {
+        templatePath = path.resolve(templatePath, "template");
+      }
       const targetPath = process.cwd();
       fse.ensureDirSync(templatePath);
       fse.ensureDirSync(targetPath);
@@ -314,46 +313,11 @@ class InitCommand extends Command {
     await this.ejsRender({ ignore });
   }
 
-  async installCustomTemplate() {
-    // 查询自定义模板的入口文件
-    // if (await this.templateNpm.exists(version)) {
-    const rootFile = this.templateNpm.getRootFilePath();
-
-    if (fs.existsSync(rootFile)) {
-      log.notice("开始执行自定义模板");
-      const templatePath = process.env.CLI_TEMPLATE_PATH;
-      const options = {
-        templateInfo: this.templateInfo,
-        projectInfo: this.projectInfo,
-        sourcePath: templatePath,
-        targetPath: process.cwd(),
-      };
-      const code = `require('${rootFile}')(${JSON.stringify(options)})`;
-      log.verbose("code", code);
-      await execAsync("node", ["-e", code], {
-        stdio: "inherit",
-        cwd: process.cwd(),
-      });
-      log.success("自定义模板安装成功");
-    } else {
-      throw new Error("自定义模板入口文件不存在！");
-    }
-    // }
-  }
-
   async installTemplate() {
     log.verbose("templateInfo", this.templateInfo);
     if (this.templateInfo) {
-      if (!this.templateInfo.type) {
-        this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
-      }
-      if (!process.env.CLI_TEMPLATE_PATH) {
-        // 标准安装
-        await this.installNormalTemplate();
-      } else {
-        // 自定义安装
-        await this.installCustomTemplate();
-      }
+      // 安装模板
+      await this.installNormalTemplate();
     } else {
       throw new Error("项目模板信息不存在！");
     }
