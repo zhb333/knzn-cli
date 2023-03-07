@@ -50,7 +50,7 @@ class Package {
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
-      registry: getDefaultRegistry(),
+      registry: getDefaultRegistry(true),
       pkgs: [
         {
           name: this.packageName,
@@ -74,6 +74,7 @@ class Package {
     await this.prepare();
     // 1. 获取最新的npm模块版本号
     const latestPackageVersion = await getNpmLatestVersion(this.packageName);
+    console.log("latestPackageVersion", latestPackageVersion);
     if (semver.gt(latestPackageVersion, this.packageVersion)) {
       await this._install(latestPackageVersion);
       this.packageVersion = latestPackageVersion;
