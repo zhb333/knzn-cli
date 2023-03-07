@@ -6,6 +6,7 @@ module.exports = () => {
       name: "knzn standard template",
       version: "1.0.1",
       type: "normal",
+      ignore: ["**/public/index.html"],
     },
     {
       tag: "component",
@@ -13,13 +14,15 @@ module.exports = () => {
       name: "lego vue3 components",
       version: "1.0.5",
       type: "normal",
+      ignore: ["**/*.png"],
     },
     {
       tag: "project",
       npmName: "@imooc-cli/imooc-lego-standard-template",
       name: "knzn-cli lego standard template",
       version: "1.0.0",
-      type: "normal",
+      type: "custom",
+      ignore: ["**/public/index.html"],
     },
     {
       tag: "project",

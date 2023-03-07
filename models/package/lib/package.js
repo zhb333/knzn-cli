@@ -30,24 +30,14 @@ class Package {
     this.packageName = options.packageName;
     // package的version
     this.packageVersion = options.packageVersion;
-    // 是否获取过 package 最新 版本
-    this.isGiveLatestVersion = false;
-    // 保存最新版本号
-    this.saveLatestVersion = "";
   }
 
   async prepare() {
     if (this.storeDir && !pathExists(this.storeDir)) {
       fse.mkdirpSync(this.storeDir);
     }
-    if (
-      this.packageVersion === "latest" &&
-      this.packageVersion !== this.saveLatestVersion &&
-      !this.isGiveLatestVersion
-    ) {
+    if (this.packageVersion === "latest") {
       this.packageVersion = await getNpmLatestVersion(this.packageName);
-      this.saveLatestVersion = this.packageVersion;
-      this.isGiveLatestVersion = true;
     }
   }
 

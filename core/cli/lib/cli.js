@@ -81,7 +81,12 @@ function registerCommand() {
     .usage(`<command> [options]`)
     .version(pkg.version)
     .option("-d, --debug", "是否开启调试模式", false)
-    .option("-tp, --targetPath <targetPath>", "是否指定本地调试文件路径", "");
+    .option("-tp, --targetPath <targetPath>", "是否指定本地调试文件路径", "")
+    .option(
+      "-tmp, --templatePath <templatePath>",
+      "是否指定本地调试模板文件路径",
+      ""
+    );
 
   program
     .command("init [projectName]")
@@ -108,6 +113,11 @@ function registerCommand() {
   // 指定targetPath
   program.on("option:targetPath", function () {
     process.env.CLI_TARGET_PATH = program._optionValues.targetPath;
+  });
+
+  // 指定 templatePath
+  program.on("option:templatePath", function () {
+    process.env.CLI_TEMPLATE_PATH = program._optionValues.templatePath;
   });
 
   // 对未知命令监听

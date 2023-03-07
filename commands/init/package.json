@@ -36,6 +36,7 @@
     "glob": "^9.2.1",
     "inquirer": "8.2.5",
     "kebab-case": "^1.0.2",
+    "pkg-dir": "4.2.0",
     "semver": "^7.3.8",
     "user-home": "^3.0.0",
     "validate-npm-package-name": "^5.0.0"

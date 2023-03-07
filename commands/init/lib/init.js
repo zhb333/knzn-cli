@@ -6,6 +6,7 @@ const inquirer = require("inquirer");
 const fse = require("fs-extra");
 const glob = require("glob");
 const ejs = require("ejs");
+const pkgDir = require("pkg-dir").sync;
 const semver = require("semver");
 const userHome = require("user-home");
 var validatePackageName = require("validate-npm-package-name");
@@ -23,7 +24,6 @@ const TEMPLATE_TYPE_NORMAL = "normal";
 const TEMPLATE_TYPE_CUSTOM = "custom";
 
 const WHITE_COMMAND = ["npm", "cnpm"];
-
 class InitCommand extends Command {
   init() {
     this.projectName = this._argv[0] || "";
@@ -40,7 +40,6 @@ class InitCommand extends Command {
     );
     return !fileList || fileList.length <= 0;
   }
-
   createTemplateChoice() {
     return this.template.map((item) => ({
       value: item.npmName,
@@ -104,6 +103,20 @@ class InitCommand extends Command {
     projectPrompt.push(
       {
         type: "input",
+        name: "componentDescription",
+        message: `请输入${title}描述信息`,
+        default: `knzn-cli ${title}`,
+        // validate: function (v) {
+        //   const done = this.async();
+        //   if (!v) {
+        //     done(`请输入${title}描述信息`);
+        //     return;
+        //   }
+        //   done(null, true);
+        // },
+      },
+      {
+        type: "input",
         name: "projectVersion",
         message: `请输入${title}版本号`,
         default: "1.0.0",
@@ -115,46 +128,27 @@ class InitCommand extends Command {
           }
           done(null, true);
         },
-      },
-      {
+      }
+    );
+    if (!process.env.CLI_TEMPLATE_PATH) {
+      projectPrompt.push({
         type: "list",
         name: "projectTemplate",
         message: `请选择${title}模板`,
         choices: this.createTemplateChoice(),
+      });
+    } else {
+      if (!fse.pathExistsSync(process.env.CLI_TEMPLATE_PATH)) {
+        throw new Error("本地模板路径不存在！");
       }
-    );
-    if (type === TYPE_PROJECT) {
-      // 2. 获取项目的基本信息
-      const project = await inquirer.prompt(projectPrompt);
-      projectInfo = {
-        ...projectInfo,
-        type,
-        ...project,
-      };
-    } else if (type === TYPE_COMPONENT) {
-      const descriptionPrompt = {
-        type: "input",
-        name: "componentDescription",
-        message: "请输入组件描述信息",
-        default: "",
-        validate: function (v) {
-          const done = this.async();
-          if (!v) {
-            done("请输入组件描述信息");
-            return;
-          }
-          done(null, true);
-        },
-      };
-      projectPrompt.push(descriptionPrompt);
-      // 2. 获取组件的基本信息
-      const component = await inquirer.prompt(projectPrompt);
-      projectInfo = {
-        ...projectInfo,
-        type,
-        ...component,
-      };
     }
+    // 2. 获取项目的基本信息
+    const project = await inquirer.prompt(projectPrompt);
+    projectInfo = {
+      ...projectInfo,
+      type,
+      ...project,
+    };
     // 生成classname
     if (projectInfo.projectName) {
       projectInfo.name = projectInfo.projectName;
@@ -166,6 +160,7 @@ class InitCommand extends Command {
     if (projectInfo.componentDescription) {
       projectInfo.description = projectInfo.componentDescription;
     }
+    projectInfo.description = project.componentDescription;
     return projectInfo;
   }
 
@@ -211,41 +206,140 @@ class InitCommand extends Command {
     }
     return this.getProjectInfo();
   }
-
   async downloadTemplate() {
     const { projectTemplate } = this.projectInfo;
-    const templateInfo = this.template.find(
-      (item) => item.npmName === projectTemplate
-    );
-    const targetPath = path.resolve(userHome, ".knzn-cli", "template");
-    const storeDir = path.resolve(targetPath, "node_modules");
-    const { npmName, version } = templateInfo;
+    let templateInfo = {};
+    if (process.env.CLI_TEMPLATE_PATH) {
+      const templatePath = pkgDir(process.env.CLI_TEMPLATE_PATH);
+      const templatePkgPath = path.join(templatePath, "package.json");
+      if (fse.pathExistsSync(templatePkgPath)) {
+        const templatePkg = require(templatePkgPath);
+        const { name: npmName, version } = templatePkg;
+        templateInfo = Object.assign(templateInfo, {
+          npmName,
+          version,
+          ignore: ["**/public/**"],
+        });
+      } else {
+        throw new Error("本地模板路径下不存在 package.json !");
+      }
+    } else {
+      templateInfo = this.template.find(
+        (item) => item.npmName === projectTemplate
+      );
+    }
     this.templateInfo = templateInfo;
-    const templateNpm = new Package({
-      targetPath,
-      storeDir,
-      packageName: npmName,
-      packageVersion: version,
-    });
-    if (!(await templateNpm.exists(version))) {
-      const spinner = spinnerStart("正在下载模板...");
-      try {
-        await templateNpm.install();
-      } catch (e) {
-        throw e;
-      } finally {
-        spinner.stop(true);
-        if (await templateNpm.exists(version)) {
-          log.success("下载模板成功");
-          this.templateNpm = templateNpm;
+    const templatePath = process.env.CLI_TEMPLATE_PATH;
+    let templateNpm = null;
+    const { npmName, version } = templateInfo;
+    if (!templatePath) {
+      const targetPath = path.resolve(userHome, ".knzn-cli", "template");
+      const storeDir = path.resolve(targetPath, "node_modules");
+      templateNpm = new Package({
+        targetPath,
+        storeDir,
+        packageName: npmName,
+        packageVersion: version,
+      });
+      if (!(await templateNpm.exists(version))) {
+        const spinner = spinnerStart("正在下载模板...");
+        try {
+          await templateNpm.install();
+        } catch (e) {
+          throw e;
+        } finally {
+          spinner.stop(true);
+          if (await templateNpm.exists(version)) {
+            log.success("下载模板成功");
+          }
         }
       }
+    } else {
+      templateNpm = new Package({
+        targetPath: templatePath,
+        packageName: npmName,
+        packageVersion: version,
+      });
     }
+    this.templateNpm = templateNpm;
   }
 
-  async installNormalTemplate() {}
+  async ejsRender(options) {
+    const dir = process.cwd();
+    const projectInfo = this.projectInfo;
+    const files = await glob("**", {
+      cwd: dir,
+      ignore: options.ignore || "",
+      nodir: true,
+    });
 
-  async installCustomTemplate() {}
+    return Promise.all(
+      files.map((file) => {
+        const filePath = path.join(dir, file);
+        return new Promise((resolve, reject) => {
+          ejs.renderFile(filePath, projectInfo, {}, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              fse.writeFileSync(filePath, result);
+              resolve(result);
+            }
+          });
+        });
+      })
+    );
+  }
+
+  async installNormalTemplate() {
+    log.verbose("templateNpm", this.templateNpm);
+    // 拷贝模板代码至当前目录
+    let spinner = spinnerStart("正在安装模板...");
+    try {
+      const templatePath = path.resolve(
+        this.templateNpm.cacheFilePath,
+        "template"
+      );
+      const targetPath = process.cwd();
+      fse.ensureDirSync(templatePath);
+      fse.ensureDirSync(targetPath);
+      fse.copySync(templatePath, targetPath);
+    } catch (e) {
+      throw e;
+    } finally {
+      spinner.stop(true);
+      log.success("模板安装成功");
+    }
+    const templateIgnore = this.templateInfo.ignore || [];
+    const ignore = ["**/node_modules/**", ...templateIgnore];
+    await this.ejsRender({ ignore });
+  }
+
+  async installCustomTemplate() {
+    // 查询自定义模板的入口文件
+    // if (await this.templateNpm.exists(version)) {
+    const rootFile = this.templateNpm.getRootFilePath();
+
+    if (fs.existsSync(rootFile)) {
+      log.notice("开始执行自定义模板");
+      const templatePath = process.env.CLI_TEMPLATE_PATH;
+      const options = {
+        templateInfo: this.templateInfo,
+        projectInfo: this.projectInfo,
+        sourcePath: templatePath,
+        targetPath: process.cwd(),
+      };
+      const code = `require('${rootFile}')(${JSON.stringify(options)})`;
+      log.verbose("code", code);
+      await execAsync("node", ["-e", code], {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      });
+      log.success("自定义模板安装成功");
+    } else {
+      throw new Error("自定义模板入口文件不存在！");
+    }
+    // }
+  }
 
   async installTemplate() {
     log.verbose("templateInfo", this.templateInfo);
@@ -253,14 +347,12 @@ class InitCommand extends Command {
       if (!this.templateInfo.type) {
         this.templateInfo.type = TEMPLATE_TYPE_NORMAL;
       }
-      if (this.templateInfo.type === TEMPLATE_TYPE_NORMAL) {
+      if (!process.env.CLI_TEMPLATE_PATH) {
         // 标准安装
         await this.installNormalTemplate();
-      } else if (this.templateInfo.type === TEMPLATE_TYPE_CUSTOM) {
+      } else {
         // 自定义安装
         await this.installCustomTemplate();
-      } else {
-        throw new Error("无法识别项目模板类型！");
       }
     } else {
       throw new Error("项目模板信息不存在！");
