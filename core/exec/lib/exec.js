@@ -77,7 +77,7 @@ async function exec() {
       });
 
       child.on("exit", (e) => {
-        log.verbose("命令执行成功:" + e);
+        log.verbose("命令执行成功: " + e);
         process.exit(e);
       });
     } catch (e) {

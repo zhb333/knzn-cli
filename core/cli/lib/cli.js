@@ -123,7 +123,7 @@ function registerCommand() {
   // 对未知命令监听
   program.on("command:*", function (obj) {
     const availableCommands = program.commands.map((cmd) => cmd.name());
-    console.log(colors.red("未知的命令: " + obj[0]));
+    console.log(colors.red("未知的命令:  " + obj[0]));
     if (availableCommands.length > 0) {
       console.log(colors.red("可用命令： " + availableCommands.join(", ")));
     }

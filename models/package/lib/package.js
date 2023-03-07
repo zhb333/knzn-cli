@@ -16,7 +16,7 @@ const {
 class Package {
   constructor(options) {
     if (!options) {
-      throw new Error("Package类的options参数不能为空！");
+      throw new Error("Package类的options参数不能为空 !");
     }
 
     if (!isObject(options)) {

@@ -136,7 +136,7 @@ class InitCommand extends Command {
       });
     } else {
       if (!fse.pathExistsSync(process.env.CLI_TEMPLATE_PATH)) {
-        throw new Error("本地模板路径不存在！");
+        throw new Error("本地模板路径不存在!");
       }
     }
     // 2. 获取项目的基本信息
