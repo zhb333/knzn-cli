@@ -1,6 +1,6 @@
 {
   "name": "@knzn/init",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/commands/init#readme",
@@ -27,10 +27,10 @@
     "url": "https://github.com/zhb333/knzn-cli/issues"
   },
   "dependencies": {
-    "@knzn/command": "^1.0.0",
+    "@knzn/command": "^1.0.1",
     "@knzn/log": "^0.0.13",
-    "@knzn/package": "^0.0.13",
-    "@knzn/utils": "^0.0.13",
+    "@knzn/package": "^0.0.14",
+    "@knzn/utils": "^0.0.14",
     "ejs": "^3.1.8",
     "fs-extra": "^11.1.0",
     "glob": "^9.2.1",
