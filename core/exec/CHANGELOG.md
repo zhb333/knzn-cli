@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.17](https://github.com/zhb333/knzn-cli/compare/@knzn/exec@0.0.16...@knzn/exec@0.0.17) (2023-03-09)
+
+**Note:** Version bump only for package @knzn/exec
+
+
+
+
+
 ## [0.0.16](https://github.com/zhb333/knzn-cli/compare/@knzn/exec@0.0.15...@knzn/exec@0.0.16) (2023-03-07)
 
 **Note:** Version bump only for package @knzn/exec

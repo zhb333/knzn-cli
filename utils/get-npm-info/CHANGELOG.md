@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.15](https://github.com/zhb333/knzn-cli/compare/@knzn/get-npm-info@0.0.14...@knzn/get-npm-info@0.0.15) (2023-03-09)
+
+**Note:** Version bump only for package @knzn/get-npm-info
+
+
+
+
+
 ## 0.0.14 (2023-03-07)
 
 
