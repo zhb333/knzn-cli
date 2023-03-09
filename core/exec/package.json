@@ -30,5 +30,6 @@
     "@knzn/log": "^0.0.13",
     "@knzn/package": "^0.0.17",
     "@knzn/utils": "^0.0.14"
-  }
+  },
+  "gitHead": "6f1ee2b482ee4ae146eecb906d2cab09595560bd"
 }

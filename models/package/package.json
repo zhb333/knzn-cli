@@ -35,5 +35,6 @@
     "path-exists": "4.0.0",
     "pkg-dir": "5.0.0",
     "semver": "^7.3.8"
-  }
+  },
+  "gitHead": "6f1ee2b482ee4ae146eecb906d2cab09595560bd"
 }
