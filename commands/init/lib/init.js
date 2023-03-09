@@ -13,14 +13,14 @@ var validatePackageName = require("validate-npm-package-name");
 const Command = require("@knzn/command");
 const Package = require("@knzn/package");
 const log = require("@knzn/log");
-const { spinnerStart } = require("@knzn/utils");
+const { spinnerStart, execAsync } = require("@knzn/utils");
 
 const getProjectTemplate = require("./getProjectTemplate");
 
 const TYPE_PROJECT = "project";
 const TYPE_COMPONENT = "component";
 
-const WHITE_COMMAND = ["npm", "cnpm"];
+const WHITE_COMMAND = ["npm", "cnpm", "yarn"];
 class InitCommand extends Command {
   init() {
     this.projectName = this._argv[0] || "";
@@ -211,11 +211,12 @@ class InitCommand extends Command {
       const templatePkgPath = path.join(templatePath, "package.json");
       if (fse.pathExistsSync(templatePkgPath)) {
         const templatePkg = require(templatePkgPath);
-        const { name: npmName, version } = templatePkg;
+        const { name: npmName, version, template } = templatePkg;
         templateInfo = Object.assign(templateInfo, {
           npmName,
           version,
           ignore: ["**/public/**"],
+          ...template,
         });
       } else {
         throw new Error("本地模板路径下不存在 package.json !");
@@ -287,6 +288,33 @@ class InitCommand extends Command {
     );
   }
 
+  checkCommand(cmd) {
+    if (WHITE_COMMAND.includes(cmd)) {
+      return cmd;
+    }
+    return null;
+  }
+
+  async execCommand(command, errMsg) {
+    let ret;
+    if (command) {
+      const cmdArray = command.split(" ");
+      const cmd = this.checkCommand(cmdArray[0]);
+      if (!cmd) {
+        throw new Error("命令不存在！命令：" + command);
+      }
+      const args = cmdArray.slice(1);
+      ret = await execAsync(cmd, args, {
+        stdio: "inherit",
+        cwd: process.cwd(),
+      });
+    }
+    if (ret !== 0) {
+      throw new Error(errMsg);
+    }
+    return ret;
+  }
+
   async installNormalTemplate() {
     log.verbose("templateNpm", this.templateNpm);
     // 拷贝模板代码至当前目录
@@ -311,6 +339,11 @@ class InitCommand extends Command {
     const templateIgnore = this.templateInfo.ignore || [];
     const ignore = ["**/node_modules/**", ...templateIgnore];
     await this.ejsRender({ ignore });
+    const { installCommand, startCommand } = this.templateInfo;
+    // 依赖安装
+    await this.execCommand(installCommand, "依赖安装失败！");
+    // 启动命令执行
+    await this.execCommand(startCommand, "启动执行命令失败！");
   }
 
   async installTemplate() {

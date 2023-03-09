@@ -7,6 +7,8 @@ module.exports = () => {
       version: "1.0.1",
       type: "normal",
       ignore: ["**/public/index.html"],
+      installCommand: "yarn",
+      startCommand: "npm run serve",
     },
     {
       tag: "component",
