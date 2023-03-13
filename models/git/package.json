@@ -1,0 +1,40 @@
+{
+  "name": "@knzn/git",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "zhb333 <1140457303@qq.com>",
+  "homepage": "https://github.com/zhb333/knzn-cli/tree/main/models/git#readme",
+  "license": "ISC",
+  "main": "lib/git.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhb333/knzn-cli.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/@knzn/git.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/zhb333/knzn-cli/issues"
+  },
+  "dependencies": {
+    "@knzn/log": "^0.0.13",
+    "@knzn/utils": "^0.0.14",
+    "axios": "^1.3.4",
+    "fs-extra": "^11.1.0",
+    "inquirer": "8.2.0",
+    "semver": "^7.3.8",
+    "simple-git": "^3.17.0",
+    "terminal-link": "2.1.1",
+    "user-home": "^3.0.0"
+  }
+}
