@@ -31,5 +31,6 @@
     "@knzn/git": "^1.0.1",
     "@knzn/log": "^0.0.13",
     "fs-extra": "^11.1.0"
-  }
+  },
+  "gitHead": "5af502bc66605db16b06a50f79fcfc38d806c0ed"
 }
