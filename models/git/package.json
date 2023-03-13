@@ -1,6 +1,6 @@
 {
   "name": "@knzn/git",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/models/git#readme",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@knzn/log": "^0.0.13",
-    "@knzn/utils": "^0.0.15",
+    "@knzn/utils": "^0.0.16",
     "axios": "^1.3.4",
     "fs-extra": "^11.1.0",
     "inquirer": "8.2.0",

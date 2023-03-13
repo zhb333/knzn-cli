@@ -1,6 +1,6 @@
 {
   "name": "@knzn/publish",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "> TODO: description",
   "author": "zhb333 <1140457303@qq.com>",
   "homepage": "https://github.com/zhb333/knzn-cli/tree/main/commands/publish#readme",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@knzn/command": "^1.0.2",
-    "@knzn/git": "^1.0.1",
+    "@knzn/git": "^1.0.2",
     "@knzn/log": "^0.0.13",
     "fs-extra": "^11.1.0"
   },
